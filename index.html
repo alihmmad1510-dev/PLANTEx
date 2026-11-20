@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#03040a">
+  <title>PLANET X</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="c"></canvas>
+
+  <div id="loading">
+    Loading PLANET X…
+    <small>Needs internet for Three.js. See README.txt.</small>
+  </div>
+
+  <header id="hud">
+    <div class="row">
+      <div id="planetName" class="glass">—</div>
+      <div id="saveInd" class="glass">✓ Saved</div>
+    </div>
+    <div class="stats">
+      <div class="stat glass">💰 <b id="money">0</b><small id="inc">+0/s</small></div>
+      <div class="stat glass">💎 <b id="gems">0</b></div>
+      <div class="stat glass">⚡ <b id="power">0</b></div>
+      <div class="stat glass">🏦 Lv <b id="bankLv">1</b></div>
+      <div class="stat glass">🏙️ Lv <b id="cityLv">1</b></div>
+    </div>
+    <div id="res" class="glass">
+      <span class="rc" style="--c:#9aa4b2"><i></i>CO₂ <b id="r-co2">0</b></span>
+      <span class="rc" style="--c:#3fb8ff"><i></i>H₂O <b id="r-h2o">0</b></span>
+      <span class="rc" style="--c:#ffe066"><i></i>H₂ <b id="r-h2">0</b></span>
+      <span class="rc" style="--c:#7dffb0"><i></i>O₂ <b id="r-o2">0</b></span>
+      <span class="rc" style="--c:#d18bff"><i></i>Crystals <b id="r-crystal">0</b></span>
+    </div>
+  </header>
+
+  <nav id="nav">
+    <button data-open="bank">🏦<span>Bank</span></button>
+    <button data-open="city">🏙️<span>City</span></button>
+    <button data-open="device">💣<span>Cosmic Bomb</span></button>
+    <button data-open="ship">🚀<span>Ship</span></button>
+    <button data-open="explore">🌌<span>Explore</span></button>
+    <button data-open="daily">🎁<span>Daily</span></button>
+    <button data-open="settings">⚙️<span>Settings</span></button>
+  </nav>
+
+  <section id="panel">
+    <div class="sheet">
+      <div class="ph">
+        <h2 id="ptitle"></h2>
+        <button id="pclose" aria-label="Close">✕</button>
+      </div>
+      <div id="pbody"></div>
+    </div>
+  </section>
+
+  <section id="travel" class="glass">
+    <h2 id="tname"></h2>
+    <div class="bar"><i id="tbar"></i></div>
+    <p>Flight in progress…</p>
+  </section>
+
+  <section id="create" class="overlay">
+    <div class="cbox">
+      <h1>PLANET X</h1>
+      <label class="lbl" for="pname">Planet name</label>
+      <input id="pname" maxlength="20" placeholder="My Planet" autocomplete="off">
+      <p class="lbl">Planet type</p>
+      <div id="types" class="types"></div>
+      <p class="lbl">Glow color</p>
+      <div id="accents" class="accents"></div>
+      <button id="createBtn" class="big">Create planet</button>
+    </div>
+  </section>
+
+  <button id="walkBtn" class="glass">🚶 Walk</button>
+  <div id="joy" class="glass"><div id="knob"></div></div>
+
+  <div id="toast"></div>
+  <div id="floats"></div>
+
+  <script type="module" src="game.js"></script>
+  <script>
+    // Show any startup error on screen instead of a silent loading screen.
+    function showErr(msg) {
+      var l = document.getElementById('loading');
+      if (l && !window.PLANETX_STARTED) l.innerHTML = 'PLANET X could not start.<small>' + msg + '</small>';
+    }
+    window.addEventListener('error', function (e) { showErr('Error: ' + (e.message || 'unknown') + (e.filename ? ' (' + e.filename.split('/').pop() + ':' + e.lineno + ')' : '')); });
+    window.addEventListener('unhandledrejection', function (e) { showErr('Error: ' + (e.reason && e.reason.message || e.reason)); });
+    // If the game module never starts (usually Three.js could not be downloaded), say so instead of hanging.
+    setTimeout(function () {
+      if (!window.PLANETX_STARTED) {
+        document.getElementById('loading').innerHTML = 'PLANET X could not start.' +
+          '<small>The game downloads Three.js from cdn.jsdelivr.net. Check that this device has internet, ' +
+          'that cdn.jsdelivr.net is not blocked (try another Wi-Fi or mobile data), then reload the page.</small>';
+      }
+    }, 10000);
+  </script>
+</body>
+</html>
